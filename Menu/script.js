@@ -45,15 +45,30 @@ searchForm.addEventListener("click", () => {
 // Expand sidebar by default on large screens
 if (window.innerWidth > 768) sidebar.classList.remove("collapsed");
 
+// Handle menu link clicks to switch content sections
 document.querySelectorAll('.menu-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-          e.preventDefault();
-          const target = this.getAttribute('data-target');
-          document.querySelectorAll('.main-content').forEach(content => {
-            content.classList.add('hidden');
-          });
-          document.getElementById(target).classList.remove('hidden');
-          document.querySelectorAll('.menu-link').forEach(link => link.classList.remove('active'));
-          this.classList.add('active');
-        });
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const targetId = this.getAttribute('data-target');
+    if (targetId) {
+      document.querySelectorAll('.main-content').forEach(content => {
+        content.classList.add('hidden');
       });
+      const targetContent = document.getElementById(targetId);
+      if (targetContent) {
+        targetContent.classList.remove('hidden');
+      }
+      document.querySelectorAll('.menu-link').forEach(link => link.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+
+// Initialize with the first section visible (e.g., profile-content)
+document.addEventListener('DOMContentLoaded', () => {
+  const defaultContent = document.getElementById('profile-content');
+  if (defaultContent) {
+    defaultContent.classList.remove('hidden');
+    menuLinks[0].classList.add('active');
+  }
+});
