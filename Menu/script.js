@@ -1,71 +1,71 @@
-const sidebarToggleBtns = document.querySelectorAll(".sidebar-toggle");
-const sidebar = document.querySelector(".sidebar");
-const searchForm = document.querySelector(".search-form");
-const themeToggleBtn = document.querySelector(".theme-toggle");
-const themeIcon = themeToggleBtn.querySelector(".theme-icon");
-const menuLinks = document.querySelectorAll(".menu-link");
+document.addEventListener('DOMContentLoaded', () => {
+  const sidebarToggleBtns = document.querySelectorAll(".sidebar-toggle");
+  const sidebar = document.querySelector(".sidebar");
+  const searchForm = document.querySelector(".search-form");
+  const themeToggleBtn = document.querySelector(".theme-toggle");
+  const themeIcon = themeToggleBtn.querySelector(".theme-icon");
+  const menuLinks = document.querySelectorAll(".menu-link");
 
-// Updates the theme icon based on current theme and sidebar state
-const updateThemeIcon = () => {
-  const isDark = document.body.classList.contains("dark-theme");
-  themeIcon.textContent = sidebar.classList.contains("collapsed") ? (isDark ? "light_mode" : "dark_mode") : "dark_mode";
-};
+  // Updates the theme icon based on current theme and sidebar state
+  const updateThemeIcon = () => {
+    const isDark = document.body.classList.contains("dark-theme");
+    themeIcon.textContent = sidebar.classList.contains("collapsed") ? (isDark ? "light_mode" : "dark_mode") : "dark_mode";
+  };
 
-// Apply dark theme if saved or system prefers, then update icon
-const savedTheme = localStorage.getItem("theme");
-const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-const shouldUseDarkTheme = savedTheme === "dark" || (!savedTheme && systemPrefersDark);
+  // Apply dark theme if saved or system prefers, then update icon
+  const savedTheme = localStorage.getItem("theme");
+  const systemPrefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const shouldUseDarkTheme = savedTheme === "dark" || (!savedTheme && systemPrefersDark);
 
-document.body.classList.toggle("dark-theme", shouldUseDarkTheme);
-updateThemeIcon();
-
-// Toggle between themes on theme button click
-themeToggleBtn.addEventListener("click", () => {
-  const isDark = document.body.classList.toggle("dark-theme");
-  localStorage.setItem("theme", isDark ? "dark" : "light");
+  document.body.classList.toggle("dark-theme", shouldUseDarkTheme);
   updateThemeIcon();
-});
 
-// Toggle sidebar collapsed state on buttons click
-sidebarToggleBtns.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    sidebar.classList.toggle("collapsed");
+  // Toggle between themes on theme button click
+  themeToggleBtn.addEventListener("click", () => {
+    const isDark = document.body.classList.toggle("dark-theme");
+    localStorage.setItem("theme", isDark ? "dark" : "light");
     updateThemeIcon();
   });
-});
 
-// Expand the sidebar when the search form is clicked
-searchForm.addEventListener("click", () => {
-  if (sidebar.classList.contains("collapsed")) {
-    sidebar.classList.remove("collapsed");
-    searchForm.querySelector("input").focus();
-  }
-});
+  // Toggle sidebar collapsed state on buttons click
+  sidebarToggleBtns.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      sidebar.classList.toggle("collapsed");
+      updateThemeIcon();
+    });
+  });
 
-// Expand sidebar by default on large screens
-if (window.innerWidth > 768) sidebar.classList.remove("collapsed");
-
-// Handle menu link clicks to switch content sections
-document.querySelectorAll('.menu-link').forEach(link => {
-  link.addEventListener('click', function(e) {
-    e.preventDefault();
-    const targetId = this.getAttribute('data-target');
-    if (targetId) {
-      document.querySelectorAll('.main-content').forEach(content => {
-        content.classList.add('hidden');
-      });
-      const targetContent = document.getElementById(targetId);
-      if (targetContent) {
-        targetContent.classList.remove('hidden');
-      }
-      document.querySelectorAll('.menu-link').forEach(link => link.classList.remove('active'));
-      this.classList.add('active');
+  // Expand the sidebar when the search form is clicked
+  searchForm.addEventListener("click", () => {
+    if (sidebar.classList.contains("collapsed")) {
+      sidebar.classList.remove("collapsed");
+      searchForm.querySelector("input").focus();
     }
   });
-});
 
-// Initialize with the first section visible (e.g., profile-content)
-document.addEventListener('DOMContentLoaded', () => {
+  // Expand sidebar by default on large screens
+  if (window.innerWidth > 768) sidebar.classList.remove("collapsed");
+
+  // Handle menu link clicks to switch content sections
+  menuLinks.forEach(link => {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('data-target');
+      if (targetId) {
+        document.querySelectorAll('.main-content').forEach(content => {
+          content.classList.add('hidden');
+        });
+        const targetContent = document.getElementById(targetId);
+        if (targetContent) {
+          targetContent.classList.remove('hidden');
+        }
+        menuLinks.forEach(link => link.classList.remove('active'));
+        this.classList.add('active');
+      }
+    });
+  });
+
+  // Set default content
   const defaultContent = document.getElementById('profile-content');
   if (defaultContent) {
     defaultContent.classList.remove('hidden');
