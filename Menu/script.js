@@ -44,3 +44,16 @@ searchForm.addEventListener("click", () => {
 
 // Expand sidebar by default on large screens
 if (window.innerWidth > 768) sidebar.classList.remove("collapsed");
+
+document.querySelectorAll('.menu-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = this.getAttribute('data-target');
+          document.querySelectorAll('.main-content').forEach(content => {
+            content.classList.add('hidden');
+          });
+          document.getElementById(target).classList.remove('hidden');
+          document.querySelectorAll('.menu-link').forEach(link => link.classList.remove('active'));
+          this.classList.add('active');
+        });
+      });
