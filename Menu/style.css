@@ -38,6 +38,10 @@ body {
   background: var(--color-bg-primary);
 }
 
+.hidden {
+  display: none;
+}
+
 .sidebar {
   position: sticky;
   top: 0;
@@ -198,7 +202,6 @@ body {
 .menu-list .menu-link:is(:hover, .active) {
   color: #fff;
   background: var(--color-hover-primary);
-
 }
 
 .sidebar .sidebar-footer {
@@ -352,9 +355,5 @@ body.dark-theme .theme-toggle-indicator {
 
   .container .main-content {
     padding: 30px 20px;
-  }
-
-  .hidden{
-    display: none;
   }
 }
