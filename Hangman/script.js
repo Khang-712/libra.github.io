@@ -5,10 +5,10 @@ const hangmanImage = document.querySelector(".hangman-box img");
 const gameModal = document.querySelector(".game-modal");
 const playAgainBtn = gameModal.querySelector("button");
 
-// Define word list with multiple words
+// Define word list
 const wordList = [
-    { word: "sunflower", hint: "A tall plant with a large yellow flower head." },
     { word: "rainbow", hint: "A colorful arc in the sky." },
+    { word: "sunflower", hint: "A tall plant with a large yellow flower head." },
     { word: "computer", hint: "An electronic device for processing data." },
     { word: "guitar", hint: "A stringed musical instrument." }
 ];
@@ -62,6 +62,17 @@ const initGame = (button, clickedLetter) => {
     if(correctLetters.length === currentWord.length) return gameOver(true);
 }
 
+// Simulate game over state for demonstration
+const simulateGameOver = () => {
+    currentWord = "rainbow";
+    wrongGuessCount = 6;
+    hangmanImage.src = "hangman-6.svg";
+    guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+    wordDisplay.innerHTML = currentWord.split("").map(letter => `<li class="letter">${letter}</li>`).join("");
+    keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = true);
+    gameOver(false);
+};
+
 // Creating keyboard buttons and adding event listeners
 for (let i = 65; i <= 90; i++) {
     const button = document.createElement("button");
@@ -70,5 +81,6 @@ for (let i = 65; i <= 90; i++) {
     button.addEventListener("click", (e) => initGame(e.target, String.fromCharCode(i)));
 }
 
-getRandomWord();
+// Start with game over state for this example
+simulateGameOver();
 playAgainBtn.addEventListener("click", getRandomWord);
