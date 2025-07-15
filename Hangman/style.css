@@ -27,7 +27,7 @@ body {
 }
 .hangman-box img {
     user-select: none;
-    max-width: 300px;
+    max-width: 350px;
 }
 .hangman-box h1 {
     font-size: 2rem;
