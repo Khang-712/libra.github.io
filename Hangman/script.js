@@ -62,7 +62,7 @@ const initGame = (button, clickedLetter) => {
     if(correctLetters.length === currentWord.length) return gameOver(true);
 }
 
-// Simulate game over state for demonstration
+// Simulate game over state
 const simulateGameOver = () => {
     currentWord = "rainbow";
     wrongGuessCount = 6;
@@ -70,7 +70,7 @@ const simulateGameOver = () => {
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
     wordDisplay.innerHTML = currentWord.split("").map(letter => `<li class="letter">${letter}</li>`).join("");
     keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = true);
-    gameOver(false);
+    gameOver(false); // Ensure modal is shown
 };
 
 // Creating keyboard buttons and adding event listeners
@@ -81,6 +81,6 @@ for (let i = 65; i <= 90; i++) {
     button.addEventListener("click", (e) => initGame(e.target, String.fromCharCode(i)));
 }
 
-// Start with game over state for this example
+// Start with game over state
 simulateGameOver();
 playAgainBtn.addEventListener("click", getRandomWord);
