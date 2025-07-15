@@ -29,7 +29,7 @@ const resetGame = () => {
 
 const getRandomWord = () => {
     const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
-    currentWord = word;
+    currentWord = word.toLowerCase(); // Chuyển từ thành chữ thường để tránh lỗi chữ hoa/thường
     document.querySelector(".hint-text b").innerText = hint;
     resetGame();
 }
@@ -43,9 +43,10 @@ const gameOver = (isVictory) => {
 }
 
 const initGame = (button, clickedLetter) => {
-    if(currentWord.includes(clickedLetter)) {
-        [...currentWord].forEach((letter, index) => {
-            if(letter === clickedLetter) {
+    const letter = clickedLetter.toLowerCase(); // Chuyển chữ cái nhập thành chữ thường
+    if (currentWord.includes(letter)) {
+        [...currentWord].forEach((wordLetter, index) => {
+            if (wordLetter === letter) {
                 correctLetters.push(letter);
                 wordDisplay.querySelectorAll("li")[index].innerText = letter;
                 wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
@@ -58,8 +59,8 @@ const initGame = (button, clickedLetter) => {
     button.disabled = true;
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
 
-    if(wrongGuessCount === maxGuesses) return gameOver(false);
-    if(correctLetters.length === currentWord.length) return gameOver(true);
+    if (wrongGuessCount === maxGuesses) return gameOver(false);
+    if (correctLetters.length === new Set(currentWord).size) return gameOver(true); // Sử dụng Set để đếm các chữ cái duy nhất
 }
 
 // Creating keyboard buttons and adding event listeners
