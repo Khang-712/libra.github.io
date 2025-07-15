@@ -1,149 +1,75 @@
-/* Importing Google font - Open Sans */
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap");
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: "Open Sans", sans-serif;
+const wordDisplay = document.querySelector(".word-display");
+const guessesText = document.querySelector(".guesses-text b");
+const keyboardDiv = document.querySelector(".keyboard");
+const hangmanImage = document.querySelector(".hangman-box img");
+const gameModal = document.querySelector(".game-modal");
+const playAgainBtn = gameModal.querySelector("button");
+
+// Define word list
+const wordList = [
+    { word: "rainbow", hint: "A colorful arc in the sky." },
+    { word: "sunflower", hint: "A tall plant with a large yellow flower head." },
+    { word: "computer", hint: "An electronic device for processing data." },
+    { word: "guitar", hint: "A stringed musical instrument." }
+];
+
+// Initializing game variables
+let currentWord, correctLetters, wrongGuessCount;
+const maxGuesses = 6;
+
+const resetGame = () => {
+    correctLetters = [];
+    wrongGuessCount = 0;
+    hangmanImage.src = "hangman-0.svg";
+    guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+    wordDisplay.innerHTML = currentWord.split("").map(() => `<li class="letter"></li>`).join("");
+    keyboardDiv.querySelectorAll("button").forEach(btn => btn.disabled = false);
+    gameModal.classList.remove("show");
 }
-body {
-    display: flex;
-    padding: 0 10px;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-    background: #5E63BA;
+
+const getRandomWord = () => {
+    const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
+    currentWord = word;
+    document.querySelector(".hint-text b").innerText = hint;
+    resetGame();
 }
-.container {
-    display: flex;
-    width: 800px; /* Tăng kích thước box lên */
-    padding: 30px; /* Tăng padding để cách xa hơn */
-    background: #fff;
-    border-radius: 15px;
-    align-items: center;
-    justify-content: space-between;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-    gap: 20px; /* Thêm khoảng cách giữa các phần tử */
+
+const gameOver = (isVictory) => {
+    const modalText = isVictory ? `You found the word:` : 'The correct word was:';
+    gameModal.querySelector("img").src = `${isVictory ? 'victory' : 'lost'}.gif`;
+    gameModal.querySelector("h4").innerText = isVictory ? 'Congrats!' : 'Game Over!';
+    gameModal.querySelector("p").innerHTML = `${modalText} <b>${currentWord}</b>`;
+    gameModal.classList.add("show");
 }
-.hangman-box img {
-    user-select: none;
-    max-width: 200px; /* Tăng kích thước hình ảnh */
+
+const initGame = (button, clickedLetter) => {
+    if(currentWord.includes(clickedLetter)) {
+        [...currentWord].forEach((letter, index) => {
+            if(letter === clickedLetter) {
+                correctLetters.push(letter);
+                wordDisplay.querySelectorAll("li")[index].innerText = letter;
+                wordDisplay.querySelectorAll("li")[index].classList.add("guessed");
+            }
+        });
+    } else {
+        wrongGuessCount++;
+        hangmanImage.src = `hangman-${wrongGuessCount}.svg`;
+    }
+    button.disabled = true;
+    guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
+
+    if(wrongGuessCount === maxGuesses) return gameOver(false);
+    if(correctLetters.length === currentWord.length) return gameOver(true);
 }
-.hangman-box h1 {
-    font-size: 2rem;
-    text-align: center;
-    margin-top: 15px;
-    text-transform: uppercase;
+
+// Creating keyboard buttons and adding event listeners
+for (let i = 65; i <= 90; i++) {
+    const button = document.createElement("button");
+    button.innerText = String.fromCharCode(i);
+    keyboardDiv.appendChild(button);
+    button.addEventListener("click", (e) => initGame(e.target, String.fromCharCode(i)));
 }
-.game-box .word-display {
-    gap: 15px; /* Tăng khoảng cách giữa các chữ cái */
-    list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
-}
-.word-display .letter {
-    width: 40px; /* Tăng kích thước chữ cái */
-    font-size: 2.5rem;
-    text-align: center;
-    font-weight: 600;
-    margin: 0 10px 15px;
-    text-transform: uppercase;
-    border-bottom: 3px solid #000;
-}
-.game-box h4 {
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 500;
-    margin-bottom: 15px;
-}
-.game-box h4 b {
-    font-weight: 600;
-}
-.game-box .keyboard {
-    display: flex;
-    gap: 10px; /* Tăng khoảng cách giữa các nút */
-    flex-wrap: wrap;
-    justify-content: center;
-}
-.keyboard button {
-    padding: 12px;
-    width: calc(100% / 13 - 10px); /* Điều chỉnh kích thước nút */
-    color: #fff;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: 600;
-    border-radius: 6px;
-    text-transform: uppercase;
-    background: #5E63BA;
-}
-.keyboard button[disabled] {
-    pointer-events: none;
-    opacity: 0.6;
-}
-.keyboard button:hover {
-    background: #8286c9;
-}
-.game-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    pointer-events: none;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    padding: 0 10px;
-    transition: opacity 0.4s ease;
-}
-.game-modal.show {
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity 0.4s 0.4s ease;
-}
-.game-modal .content {
-    padding: 40px;
-    max-width: 500px;
-    width: 100%;
-    border-radius: 15px;
-    background: #fff;
-    text-align: center;
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-}
-.game-modal img {
-    max-width: 150px;
-    margin-bottom: 25px;
-}
-.game-modal h4 {
-    font-size: 1.8rem;
-}
-.game-modal p {
-    font-size: 1.3rem;
-    margin: 20px 0 40px;
-    font-weight: 500;
-}
-.game-modal p b {
-    color: #5E63BA;
-    font-weight: 600;
-}
-.game-modal button {
-    padding: 14px 25px;
-    color: #fff;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 1.2rem;
-    font-weight: 600;
-    border-radius: 6px;
-    background: #5E63BA;
-}
-.game-modal button:hover {
-    background: #8286c9;
-}
+
+// Start the game normally
+getRandomWord();
+playAgainBtn.addEventListener("click", getRandomWord);
