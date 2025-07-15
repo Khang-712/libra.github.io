@@ -29,7 +29,7 @@ const resetGame = () => {
 
 const getRandomWord = () => {
     const { word, hint } = wordList[Math.floor(Math.random() * wordList.length)];
-    currentWord = word.toLowerCase(); // Chuyển từ thành chữ thường để tránh lỗi chữ hoa/thường
+    currentWord = word.toLowerCase(); // Đảm bảo từ là chữ thường
     document.querySelector(".hint-text b").innerText = hint;
     resetGame();
 }
@@ -60,7 +60,7 @@ const initGame = (button, clickedLetter) => {
     guessesText.innerText = `${wrongGuessCount} / ${maxGuesses}`;
 
     if (wrongGuessCount === maxGuesses) return gameOver(false);
-    if (correctLetters.length === new Set(currentWord).size) return gameOver(true); // Sử dụng Set để đếm các chữ cái duy nhất
+    if (correctLetters.length === new Set(currentWord).size) return gameOver(true);
 }
 
 // Creating keyboard buttons and adding event listeners
