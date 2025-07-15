@@ -16,7 +16,7 @@ body {
 }
 .container {
     display: flex;
-    width: 800px;
+    width: 1000px;
     padding: 30px;
     background: #fff;
     border-radius: 15px;
