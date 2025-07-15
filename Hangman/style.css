@@ -16,18 +16,18 @@ body {
 }
 .container {
     display: flex;
-    width: 800px; /* Tăng kích thước box lên */
-    padding: 30px; /* Tăng padding để cách xa hơn */
+    width: 800px;
+    padding: 30px;
     background: #fff;
     border-radius: 15px;
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-    gap: 20px; /* Thêm khoảng cách giữa các phần tử */
+    gap: 20px;
 }
 .hangman-box img {
     user-select: none;
-    max-width: 200px; /* Tăng kích thước hình ảnh */
+    max-width: 200px;
 }
 .hangman-box h1 {
     font-size: 2rem;
@@ -36,15 +36,15 @@ body {
     text-transform: uppercase;
 }
 .game-box .word-display {
-    gap: 15px; /* Tăng khoảng cách giữa các chữ cái */
+    gap: 15px;
     list-style: none;
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Thay đổi từ wrap thành nowrap */
     justify-content: center;
     align-items: center;
 }
 .word-display .letter {
-    width: 40px; /* Tăng kích thước chữ cái */
+    width: 40px;
     font-size: 2.5rem;
     text-align: center;
     font-weight: 600;
@@ -63,13 +63,13 @@ body {
 }
 .game-box .keyboard {
     display: flex;
-    gap: 10px; /* Tăng khoảng cách giữa các nút */
+    gap: 10px;
     flex-wrap: wrap;
     justify-content: center;
 }
 .keyboard button {
     padding: 12px;
-    width: calc(100% / 13 - 10px); /* Điều chỉnh kích thước nút */
+    width: calc(100% / 13 - 10px);
     color: #fff;
     border: none;
     outline: none;
